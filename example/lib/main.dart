@@ -16,8 +16,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
-  final _iosExternalLinkAccountPlugin = IosExternalLinkAccount();
   bool? canMakePayment;
 
   @override
@@ -34,12 +32,12 @@ class _MyAppState extends State<MyApp> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
     try {
-      platformVersion =
-          await _iosExternalLinkAccountPlugin.getPlatformVersion() ??
-              'Unknown platform version';
-      canMakePayment = await _iosExternalLinkAccountPlugin.canOpen();
+      canMakePayment = await IosExternalLinkAccount().canMakePayments();
+
       if (canMakePayment ?? false) {
-        _iosExternalLinkAccountPlugin.open();
+        if (await IosExternalLinkAccount().canOpen() ?? false) {
+          IosExternalLinkAccount().open();
+        }
       }
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
@@ -50,9 +48,7 @@ class _MyAppState extends State<MyApp> {
     // setState to update our non-existent appearance.
     if (!mounted) return;
 
-    setState(() {
-      _platformVersion = platformVersion;
-    });
+    setState(() {});
   }
 
   @override
@@ -66,7 +62,6 @@ class _MyAppState extends State<MyApp> {
           child: Column(
             children: [
               Text("Can make payment : ${canMakePayment}"),
-              Text('Running on: $_platformVersion\n'),
             ],
           ),
         ),

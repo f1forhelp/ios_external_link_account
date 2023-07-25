@@ -3,19 +3,13 @@ import 'package:flutter/services.dart';
 class IosExternalLinkAccount {
   static final IosExternalLinkAccount _obj = IosExternalLinkAccount._internal();
 
-  IosExternalLinkAccount factory() {
+  factory IosExternalLinkAccount() {
     return _obj;
   }
 
   IosExternalLinkAccount._internal();
 
   final methodChannel = const MethodChannel('ios_external_link_account');
-
-  Future<String?> getPlatformVersion() async {
-    final version =
-        await methodChannel.invokeMethod<String>('getPlatformVersion');
-    return version;
-  }
 
   Future<bool?> canMakePayments() async {
     final canMakePayment =
