@@ -1,19 +1,35 @@
-import 'ios_external_link_account_platform_interface.dart';
+import 'package:flutter/services.dart';
 
 class IosExternalLinkAccount {
-  Future<String?> getPlatformVersion() {
-    return IosExternalLinkAccountPlatform.instance.getPlatformVersion();
+  static final IosExternalLinkAccount _obj = IosExternalLinkAccount._internal();
+
+  IosExternalLinkAccount factory() {
+    return _obj;
   }
 
-  Future<bool?> canMakePayments() {
-    return IosExternalLinkAccountPlatform.instance.canMakePayments();
+  IosExternalLinkAccount._internal();
+
+  final methodChannel = const MethodChannel('ios_external_link_account');
+
+  Future<String?> getPlatformVersion() async {
+    final version =
+        await methodChannel.invokeMethod<String>('getPlatformVersion');
+    return version;
   }
 
-  Future<bool?> canOpen() {
-    return IosExternalLinkAccountPlatform.instance.canOpen();
+  Future<bool?> canMakePayments() async {
+    final canMakePayment =
+        await methodChannel.invokeMethod<bool>('canMakePayments');
+    return canMakePayment;
   }
 
-  Future<bool?> open() {
-    return IosExternalLinkAccountPlatform.instance.open();
+  Future<bool?> canOpen() async {
+    final canOpen = await methodChannel.invokeMethod<bool>('canOpen');
+    return canOpen;
+  }
+
+  Future<bool?> open() async {
+    final open = await methodChannel.invokeMethod<bool>('open');
+    return open;
   }
 }
