@@ -37,7 +37,10 @@ class _MyAppState extends State<MyApp> {
       platformVersion =
           await _iosExternalLinkAccountPlugin.getPlatformVersion() ??
               'Unknown platform version';
-      canMakePayment = await _iosExternalLinkAccountPlugin.canMakePayments();
+      canMakePayment = await _iosExternalLinkAccountPlugin.canOpen();
+      if (canMakePayment ?? false) {
+        _iosExternalLinkAccountPlugin.open();
+      }
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
